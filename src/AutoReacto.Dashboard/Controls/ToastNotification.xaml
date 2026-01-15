@@ -1,0 +1,112 @@
+<UserControl x:Class="AutoReacto.Dashboard.Controls.ToastNotification"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="ToastRoot"
+             Opacity="0"
+             VerticalAlignment="Top"
+             HorizontalAlignment="Center"
+             Margin="0,20,0,0">
+    
+    <UserControl.Resources>
+        <Storyboard x:Key="ShowAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" 
+                             From="0" To="1" Duration="0:0:0.3"/>
+            <ThicknessAnimation Storyboard.TargetProperty="Margin"
+                                From="0,-50,0,0" To="0,20,0,0" Duration="0:0:0.3">
+                <ThicknessAnimation.EasingFunction>
+                    <QuadraticEase EasingMode="EaseOut"/>
+                </ThicknessAnimation.EasingFunction>
+            </ThicknessAnimation>
+        </Storyboard>
+        
+        <Storyboard x:Key="HideAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" 
+                             From="1" To="0" Duration="0:0:0.3"/>
+            <ThicknessAnimation Storyboard.TargetProperty="Margin"
+                                From="0,20,0,0" To="0,-50,0,0" Duration="0:0:0.3">
+                <ThicknessAnimation.EasingFunction>
+                    <QuadraticEase EasingMode="EaseIn"/>
+                </ThicknessAnimation.EasingFunction>
+            </ThicknessAnimation>
+        </Storyboard>
+    </UserControl.Resources>
+    
+    <Border x:Name="ToastBorder"
+            Background="#2B2D31"
+            BorderBrush="#3D3F45"
+            BorderThickness="1"
+            CornerRadius="8"
+            Padding="16,12"
+            MinWidth="300"
+            MaxWidth="500">
+        <Border.Effect>
+            <DropShadowEffect Color="Black" BlurRadius="20" Opacity="0.5" ShadowDepth="5"/>
+        </Border.Effect>
+        
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Icon -->
+            <Border x:Name="IconBorder" 
+                    Grid.Column="0" 
+                    Width="36" Height="36" 
+                    CornerRadius="18"
+                    Margin="0,0,12,0"
+                    VerticalAlignment="Center">
+                <TextBlock x:Name="IconText" 
+                           FontSize="18" 
+                           HorizontalAlignment="Center" 
+                           VerticalAlignment="Center"/>
+            </Border>
+            
+            <!-- Content -->
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <TextBlock x:Name="TitleText" 
+                           FontWeight="SemiBold" 
+                           FontSize="14"
+                           Foreground="White"/>
+                <TextBlock x:Name="MessageText" 
+                           FontSize="12"
+                           Foreground="#B5BAC1"
+                           TextWrapping="Wrap"
+                           Margin="0,2,0,0"/>
+            </StackPanel>
+            
+            <!-- Close Button -->
+            <Button Grid.Column="2" 
+                    Content="✕" 
+                    Background="Transparent"
+                    Foreground="#72767D"
+                    BorderThickness="0"
+                    FontSize="14"
+                    Width="24" Height="24"
+                    Cursor="Hand"
+                    VerticalAlignment="Top"
+                    Margin="8,0,0,0"
+                    Click="CloseButton_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="4">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+    </Border>
+</UserControl>

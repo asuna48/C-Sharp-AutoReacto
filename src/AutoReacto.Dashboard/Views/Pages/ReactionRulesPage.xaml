@@ -1,0 +1,479 @@
+<Page x:Class="AutoReacto.Dashboard.Views.Pages.ReactionRulesPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
+      xmlns:local="clr-namespace:AutoReacto.Dashboard.Localization"
+      Title="Reaction Rules"
+      DataContext="{x:Static local:LocalizationManager.Instance}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Rules List -->
+        <Border Grid.Column="0" Background="{StaticResource DiscordSidebarBrush}" CornerRadius="8" Margin="0,0,16,0">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" Margin="12">
+                    <TextBlock Text="{Binding Strings.ReactionRulesTitle}" Style="{StaticResource DiscordTitleStyle}" FontSize="16"/>
+                    <Button Content="{Binding Strings.AddNewRule}" 
+                            Style="{StaticResource DiscordSuccessButtonStyle}"
+                            Margin="0,12,0,0"
+                            Click="AddRule_Click"/>
+                </StackPanel>
+
+                <ListBox x:Name="RulesListBox" 
+                         Background="Transparent"
+                         BorderThickness="0"
+                         Margin="8,0,8,8"
+                         SelectionChanged="RulesListBox_SelectionChanged">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <ContentPresenter/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Margin" Value="0,4,0,0"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border x:Name="cardBorder" 
+                                    Padding="14,12" 
+                                    CornerRadius="8" 
+                                    Background="#2B2D31"
+                                    BorderThickness="2"
+                                    BorderBrush="Transparent"
+                                    Cursor="Hand">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="{Binding Name}" 
+                                                   Foreground="{StaticResource DiscordTextBrush}" 
+                                                   FontWeight="SemiBold"
+                                                   FontSize="14"/>
+                                        <TextBlock Text="{Binding TriggerWordsPreview}" 
+                                                   Foreground="{StaticResource DiscordTextMutedBrush}" 
+                                                   FontSize="12"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   Margin="0,4,0,0"/>
+                                    </StackPanel>
+                                    <Ellipse Grid.Column="1" 
+                                             Width="10" Height="10" 
+                                             VerticalAlignment="Center"
+                                             Fill="{Binding StatusColor}"/>
+                                </Grid>
+                            </Border>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                                    <Setter TargetName="cardBorder" Property="BorderBrush" Value="#5865F2"/>
+                                    <Setter TargetName="cardBorder" Property="Background" Value="#383A40"/>
+                                </DataTrigger>
+                                <Trigger SourceName="cardBorder" Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="cardBorder" Property="Background" Value="#35373C"/>
+                                </Trigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </Border>
+
+        <!-- Rule Editor -->
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel x:Name="RuleEditorPanel" Visibility="Collapsed">
+                <!-- Rule Header -->
+                <DockPanel Margin="0,0,0,16">
+                    <Button Content="{Binding Strings.DeleteRule}" 
+                            DockPanel.Dock="Right"
+                            Style="{StaticResource DiscordDangerButtonStyle}"
+                            Click="DeleteRule_Click"/>
+                    <TextBlock Text="{Binding Strings.RuleConfiguration}" Style="{StaticResource DiscordTitleStyle}"/>
+                </DockPanel>
+
+                <!-- Basic Info Card -->
+                <Border Style="{StaticResource DiscordCardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Strings.RuleName}" Style="{StaticResource DiscordLabelStyle}" Margin="0,8,0,0"/>
+                        <TextBox x:Name="RuleNameTextBox" Style="{StaticResource DiscordTextBoxStyle}"/>
+                        
+                        <CheckBox x:Name="RuleEnabledCheckBox" 
+                                  Content="{Binding Strings.Enabled}"
+                                  Style="{StaticResource DiscordCheckBoxStyle}"
+                                  Margin="0,12,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Triggers Card -->
+                <Border Style="{StaticResource DiscordCardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Strings.TriggerWords}" Style="{StaticResource DiscordSectionHeaderStyle}"/>
+                        <TextBlock Text="{Binding Strings.TriggerWordsDesc}" 
+                                   Foreground="{StaticResource DiscordTextMutedBrush}" 
+                                   FontSize="12" 
+                                   Margin="0,0,0,4"/>
+                        <TextBlock Text="{Binding Strings.TriggerWordsHint}" 
+                                   Foreground="#FAA81A" 
+                                   FontSize="11" 
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,8"/>
+                        
+                        <!-- Selected Trigger Words Display (Tag Style) -->
+                        <Border Background="{StaticResource DiscordDarkerBrush}" 
+                                CornerRadius="4" 
+                                Padding="8" 
+                                MinHeight="50"
+                                Margin="0,0,0,8">
+                            <Grid>
+                                <TextBlock x:Name="NoTriggerWordsText"
+                                           Text="{Binding Strings.NoTriggerWordsSelected}"
+                                           Foreground="{StaticResource DiscordTextMutedBrush}"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"
+                                           FontSize="12"/>
+                                <ItemsControl x:Name="SelectedTriggerWordsPanel">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="#4F545C" 
+                                                    CornerRadius="6" 
+                                                    Padding="10,6" 
+                                                    Margin="3">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding}" 
+                                                               Foreground="White"
+                                                               FontSize="13" 
+                                                               VerticalAlignment="Center"/>
+                                                    <Button Content="✕" 
+                                                            Background="Transparent" 
+                                                            Foreground="#DCDDDE"
+                                                            BorderThickness="0"
+                                                            Padding="6,0"
+                                                            Margin="6,0,0,0"
+                                                            FontSize="12"
+                                                            Cursor="Hand"
+                                                            Click="RemoveTriggerWord_Click"
+                                                            Tag="{Binding}"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </Grid>
+                        </Border>
+                        
+                        <!-- Add Trigger Word Input -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid>
+                                <TextBox x:Name="TriggerWordInputTextBox" 
+                                         Style="{StaticResource DiscordTextBoxStyle}"
+                                         Margin="0,0,8,0"
+                                         KeyDown="TriggerWordInput_KeyDown"/>
+                                <TextBlock x:Name="TriggerWordInputPlaceholder"
+                                           Text="{Binding Strings.AddTriggerWordPlaceholder}"
+                                           Foreground="#5A5D63"
+                                           FontSize="13"
+                                           IsHitTestVisible="False"
+                                           Margin="14,10,0,0"
+                                           VerticalAlignment="Center"/>
+                            </Grid>
+                            <Button Grid.Column="1" 
+                                    Content="{Binding Strings.Add}" 
+                                    Style="{StaticResource DiscordSecondaryButtonStyle}"
+                                    Click="AddTriggerWord_Click"
+                                    Padding="16,8"/>
+                        </Grid>
+                        
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                <TextBlock Text="{Binding Strings.MatchMode}" Style="{StaticResource DiscordLabelStyle}"/>
+                                <ComboBox x:Name="MatchModeComboBox" 
+                                          Style="{StaticResource DiscordComboBoxStyle}">
+                                    <ComboBoxItem Content="{Binding Strings.Contains}" Tag="Contains" Style="{StaticResource DiscordComboBoxItemStyle}"/>
+                                    <ComboBoxItem Content="{Binding Strings.ExactMatch}" Tag="Exact" Style="{StaticResource DiscordComboBoxItemStyle}"/>
+                                    <ComboBoxItem Content="{Binding Strings.StartsWith}" Tag="StartsWith" Style="{StaticResource DiscordComboBoxItemStyle}"/>
+                                    <ComboBoxItem Content="{Binding Strings.EndsWith}" Tag="EndsWith" Style="{StaticResource DiscordComboBoxItemStyle}"/>
+                                    <ComboBoxItem Content="{Binding Strings.Regex}" Tag="Regex" Style="{StaticResource DiscordComboBoxItemStyle}"/>
+                                </ComboBox>
+                            </StackPanel>
+                            
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="{Binding Strings.Options}" Style="{StaticResource DiscordLabelStyle}"/>
+                                <CheckBox x:Name="CaseSensitiveCheckBox" 
+                                          Content="{Binding Strings.CaseSensitive}"
+                                          Style="{StaticResource DiscordCheckBoxStyle}"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Emojis Card -->
+                <Border Style="{StaticResource DiscordCardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Strings.Emojis}" Style="{StaticResource DiscordSectionHeaderStyle}"/>
+                        <TextBlock Text="{Binding Strings.EmojisDesc}" 
+                                   Foreground="{StaticResource DiscordTextMutedBrush}" 
+                                   FontSize="12" 
+                                   Margin="0,0,0,8"/>
+                        
+                        <!-- Selected Emojis Display -->
+                        <Border Background="{StaticResource DiscordDarkerBrush}" 
+                                CornerRadius="4" 
+                                Padding="8" 
+                                MinHeight="50"
+                                Margin="0,0,0,8">
+                            <Grid>
+                                <TextBlock x:Name="NoEmojisText"
+                                           Text="{Binding Strings.NoEmojisSelected}"
+                                           Foreground="{StaticResource DiscordTextMutedBrush}"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"
+                                           FontSize="12"/>
+                                <ItemsControl x:Name="SelectedEmojisPanel">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="#5865F2" 
+                                                    CornerRadius="6" 
+                                                    Padding="10,6" 
+                                                    Margin="3">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <emoji:TextBlock Text="{Binding}" 
+                                                                     FontSize="20" 
+                                                                     VerticalAlignment="Center"/>
+                                                    <Button Content="✕" 
+                                                            Background="Transparent" 
+                                                            Foreground="#DCDDDE"
+                                                            BorderThickness="0"
+                                                            Padding="6,0"
+                                                            Margin="6,0,0,0"
+                                                            FontSize="12"
+                                                            Cursor="Hand"
+                                                            Click="RemoveEmoji_Click"
+                                                            Tag="{Binding}"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </Grid>
+                        </Border>
+                        
+                        <!-- Add Emoji Button + Popup -->
+                        <Grid>
+                            <Button x:Name="AddEmojiButton" 
+                                    Content="{Binding Strings.AddEmoji}" 
+                                    Style="{StaticResource DiscordSecondaryButtonStyle}"
+                                    Click="AddEmojiButton_Click"
+                                    HorizontalAlignment="Left"/>
+                            
+                            <Popup x:Name="EmojiPickerPopup" 
+                                   PlacementTarget="{Binding ElementName=AddEmojiButton}"
+                                   Placement="Bottom"
+                                   StaysOpen="False"
+                                   AllowsTransparency="True">
+                                <Border Background="{StaticResource DiscordChannelBrush}" 
+                                        BorderBrush="{StaticResource DiscordDarkBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        Padding="8"
+                                        Width="320"
+                                        Height="350">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        
+                                        <!-- Search -->
+                                        <TextBox x:Name="EmojiSearchBox" 
+                                                 Style="{StaticResource DiscordTextBoxStyle}"
+                                                 Tag="Search emojis..."
+                                                 TextChanged="EmojiSearchBox_TextChanged"/>
+                                        
+                                        <!-- Category Tabs -->
+                                        <ScrollViewer Grid.Row="1" 
+                                                      HorizontalScrollBarVisibility="Auto" 
+                                                      VerticalScrollBarVisibility="Disabled"
+                                                      Margin="0,8,0,0">
+                                            <StackPanel x:Name="CategoryTabsPanel" 
+                                                        Orientation="Horizontal"/>
+                                        </ScrollViewer>
+                                        
+                                        <!-- Emoji Grid -->
+                                        <ScrollViewer Grid.Row="2" 
+                                                      VerticalScrollBarVisibility="Auto"
+                                                      Margin="0,8,0,0">
+                                            <ItemsControl x:Name="EmojiGrid">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel Orientation="Horizontal"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border x:Name="emojiBorder" 
+                                                                Background="Transparent" 
+                                                                CornerRadius="6"
+                                                                Width="40"
+                                                                Height="40"
+                                                                Cursor="Hand"
+                                                                MouseLeftButtonUp="EmojiItem_Click"
+                                                                Tag="{Binding}"
+                                                                ToolTip="{Binding}">
+                                                            <emoji:TextBlock Text="{Binding}" 
+                                                                             FontSize="24"
+                                                                             HorizontalAlignment="Center" 
+                                                                             VerticalAlignment="Center"/>
+                                                            <Border.Style>
+                                                                <Style TargetType="Border">
+                                                                    <Style.Triggers>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter Property="Background" Value="#3D3F45"/>
+                                                                        </Trigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Border.Style>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        
+                        <!-- Custom Emoji Input -->
+                        <StackPanel Margin="0,12,0,0">
+                            <TextBlock Text="{Binding Strings.CustomEmoji}" 
+                                       Style="{StaticResource DiscordLabelStyle}"/>
+                            <TextBlock Text="{Binding Strings.CustomEmojiHint}" 
+                                       Foreground="#FAA81A" 
+                                       FontSize="11"
+                                       FontWeight="SemiBold"
+                                       TextWrapping="Wrap"
+                                       Margin="0,2,0,6"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid>
+                                    <TextBox x:Name="CustomEmojiTextBox" 
+                                             Style="{StaticResource DiscordTextBoxStyle}"
+                                             Margin="0,0,8,0"/>
+                                    <TextBlock x:Name="CustomEmojiPlaceholder"
+                                               Text="{Binding Strings.CustomEmojiPlaceholder}"
+                                               Foreground="#5A5D63"
+                                               FontSize="13"
+                                               IsHitTestVisible="False"
+                                               Margin="14,10,0,0"
+                                               VerticalAlignment="Center"/>
+                                </Grid>
+                                <Button Grid.Column="1" 
+                                        Content="{Binding Strings.Add}" 
+                                        Style="{StaticResource DiscordSecondaryButtonStyle}"
+                                        Click="AddCustomEmoji_Click"
+                                        Padding="16,8"/>
+                            </Grid>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Filters Card -->
+                <Border Style="{StaticResource DiscordCardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Strings.FiltersOptional}" Style="{StaticResource DiscordSectionHeaderStyle}"/>
+                        
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                <TextBlock Text="{Binding Strings.ChannelIds}" Style="{StaticResource DiscordLabelStyle}"/>
+                                <TextBlock Text="{Binding Strings.LeaveEmptyForAllChannels}" 
+                                           Foreground="{StaticResource DiscordTextMutedBrush}" 
+                                           FontSize="11" 
+                                           Margin="0,0,0,4"/>
+                                <TextBox x:Name="ChannelIdsTextBox" 
+                                         Style="{StaticResource DiscordTextBoxStyle}"
+                                         AcceptsReturn="True"
+                                         Height="60"/>
+                            </StackPanel>
+                            
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="{Binding Strings.UserIdsTarget}" Style="{StaticResource DiscordLabelStyle}"/>
+                                <TextBlock Text="{Binding Strings.LeaveEmptyForAllUsers}" 
+                                           Foreground="{StaticResource DiscordTextMutedBrush}" 
+                                           FontSize="11" 
+                                           Margin="0,0,0,4"/>
+                                <TextBox x:Name="UserIdsTextBox" 
+                                         Style="{StaticResource DiscordTextBoxStyle}"
+                                         AcceptsReturn="True"
+                                         Height="60"/>
+                            </StackPanel>
+                        </Grid>
+                        
+                        <StackPanel Margin="0,12,0,0">
+                            <TextBlock Text="{Binding Strings.IgnoreUserIds}" Style="{StaticResource DiscordLabelStyle}"/>
+                            <TextBlock Text="{Binding Strings.UsersToIgnore}" 
+                                       Foreground="{StaticResource DiscordTextMutedBrush}" 
+                                       FontSize="11" 
+                                       Margin="0,0,0,4"/>
+                            <TextBox x:Name="IgnoreUserIdsTextBox" 
+                                     Style="{StaticResource DiscordTextBoxStyle}"
+                                     AcceptsReturn="True"
+                                     Height="60"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Save Button -->
+                <Button Content="{Binding Strings.ApplyChanges}" 
+                        Style="{StaticResource DiscordButtonStyle}"
+                        HorizontalAlignment="Left"
+                        Click="ApplyRuleChanges_Click"/>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- No Selection Message -->
+        <StackPanel x:Name="NoSelectionPanel" 
+                    Grid.Column="1" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center">
+            <TextBlock Text="📜" FontSize="48" HorizontalAlignment="Center"/>
+            <TextBlock Text="{Binding Strings.SelectRuleToEdit}" 
+                       Foreground="{StaticResource DiscordTextMutedBrush}"
+                       FontSize="16"
+                       Margin="0,12,0,0"/>
+        </StackPanel>
+    </Grid>
+</Page>

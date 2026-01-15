@@ -1,0 +1,37 @@
+{
+  "token": "YOUR_BOT_TOKEN_HERE",
+  "prefix": "!",
+  "settings": {
+    "ignoreBots": true,
+    "ignoreSelf": true,
+    "reactionDelayMs": 250,
+    "maxReactionsPerMessage": 20,
+    "logLevel": "Information"
+  },
+  "reactionRules": [
+    {
+      "id": "hello-rule",
+      "name": "Hello Reaction",
+      "enabled": true,
+      "triggerWords": ["hello", "hi", "merhaba", "selam"],
+      "emojis": ["👋", "😊"],
+      "channelIds": [],
+      "userIds": [],
+      "ignoreUserIds": [],
+      "caseSensitive": false,
+      "matchMode": "Contains"
+    },
+    {
+      "id": "laugh-rule",
+      "name": "Laugh Reaction",
+      "enabled": true,
+      "triggerWords": ["haha", "lol", "lmao"],
+      "emojis": ["😂", "🤣"],
+      "channelIds": [],
+      "userIds": [],
+      "ignoreUserIds": [],
+      "caseSensitive": false,
+      "matchMode": "Contains"
+    }
+  ]
+}

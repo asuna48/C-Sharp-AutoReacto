@@ -1,0 +1,91 @@
+<Page x:Class="AutoReacto.Dashboard.Views.Pages.GeneralSettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="clr-namespace:AutoReacto.Dashboard.Localization"
+      Title="General Settings"
+      DataContext="{x:Static local:LocalizationManager.Instance}">
+
+    <StackPanel>
+        <!-- Title -->
+        <TextBlock Text="{Binding Strings.BotConfiguration}" Style="{StaticResource DiscordTitleStyle}" Margin="0,0,0,24"/>
+
+        <!-- Bot Token Card -->
+        <Border Style="{StaticResource DiscordCardStyle}">
+            <StackPanel>
+                <TextBlock Text="{Binding Strings.BotToken}" Style="{StaticResource DiscordLabelStyle}"/>
+                <TextBlock Text="{Binding Strings.BotTokenPlaceholder}" 
+                           Foreground="{StaticResource DiscordTextMutedBrush}" 
+                           FontSize="12" 
+                           Margin="0,0,0,8"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="TokenTextBox" 
+                             Style="{StaticResource DiscordTextBoxStyle}"
+                             Grid.Column="0"/>
+                    <Button x:Name="ShowTokenButton" 
+                            Content="👁" 
+                            Grid.Column="1"
+                            Style="{StaticResource DiscordButtonStyle}"
+                            Padding="12,10"
+                            Margin="8,0,0,0"
+                            Click="ShowTokenButton_Click"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <!-- Prefix Card -->
+        <Border Style="{StaticResource DiscordCardStyle}">
+            <StackPanel>
+                <TextBlock Text="{Binding Strings.CommandPrefix}" Style="{StaticResource DiscordLabelStyle}"/>
+                <TextBox x:Name="PrefixTextBox" 
+                         Style="{StaticResource DiscordTextBoxStyle}"
+                         Width="100"
+                         HorizontalAlignment="Left"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Bot Settings Card -->
+        <Border Style="{StaticResource DiscordCardStyle}">
+            <StackPanel>
+                <TextBlock Text="{Binding Strings.GlobalSettings}" Style="{StaticResource DiscordLabelStyle}" Margin="0,0,0,12"/>
+                
+                <CheckBox x:Name="IgnoreBotsCheckBox" 
+                          Content="{Binding Strings.ReactToBots}"
+                          Style="{StaticResource DiscordCheckBoxStyle}"
+                          Margin="0,0,0,12"/>
+                
+                <CheckBox x:Name="IgnoreSelfCheckBox" 
+                          Content="{Binding Strings.ReactToSelf}"
+                          Style="{StaticResource DiscordCheckBoxStyle}"
+                          Margin="0,0,0,16"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                        <TextBlock Text="{Binding Strings.ReactionDelay}" Style="{StaticResource DiscordLabelStyle}"/>
+                        <TextBox x:Name="ReactionDelayTextBox" 
+                                 Style="{StaticResource DiscordTextBoxStyle}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="{Binding Strings.LogLevel}" Style="{StaticResource DiscordLabelStyle}"/>
+                        <ComboBox x:Name="LogLevelComboBox" 
+                                  Style="{StaticResource DiscordComboBoxStyle}">
+                            <ComboBoxItem Content="{Binding Strings.Debug}" Tag="Debug" Style="{StaticResource DiscordComboBoxItemStyle}"/>
+                            <ComboBoxItem Content="{Binding Strings.Information}" Tag="Information" IsSelected="True" Style="{StaticResource DiscordComboBoxItemStyle}"/>
+                            <ComboBoxItem Content="{Binding Strings.Warning}" Tag="Warning" Style="{StaticResource DiscordComboBoxItemStyle}"/>
+                            <ComboBoxItem Content="{Binding Strings.Error}" Tag="Error" Style="{StaticResource DiscordComboBoxItemStyle}"/>
+                        </ComboBox>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</Page>

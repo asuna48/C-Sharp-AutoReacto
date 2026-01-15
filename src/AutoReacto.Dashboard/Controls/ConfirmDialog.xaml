@@ -1,0 +1,115 @@
+<UserControl x:Class="AutoReacto.Dashboard.Controls.ConfirmDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
+             x:Name="ConfirmDialogControl"
+             Visibility="Collapsed">
+    
+    <UserControl.Resources>
+        <!-- Button Styles -->
+        <Style x:Key="ConfirmButtonStyle" TargetType="Button">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="24,10"/>
+            <Setter Property="Margin" Value="8,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.7"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    
+    <!-- Overlay Background -->
+    <Grid>
+        <Border Background="#80000000" MouseDown="Overlay_MouseDown"/>
+        
+        <!-- Dialog Box -->
+        <Border x:Name="DialogBox"
+                Background="#36393F"
+                CornerRadius="12"
+                Padding="32,24"
+                MaxWidth="420"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+            
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="30" ShadowDepth="0" Opacity="0.6"/>
+            </Border.Effect>
+            
+            <Border.RenderTransform>
+                <ScaleTransform ScaleX="1" ScaleY="1"/>
+            </Border.RenderTransform>
+            
+            <StackPanel>
+                <!-- Icon -->
+                <Border x:Name="IconBorder"
+                        Width="72" Height="72"
+                        CornerRadius="36"
+                        Background="#ED4245"
+                        Margin="0,0,0,16"
+                        HorizontalAlignment="Center">
+                    <emoji:TextBlock x:Name="IconEmoji"
+                                     Text="⚠️"
+                                     FontSize="36"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"/>
+                </Border>
+                
+                <!-- Title -->
+                <TextBlock x:Name="TitleText"
+                           Text="Delete Rule?"
+                           FontSize="22"
+                           FontWeight="Bold"
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,12"/>
+                
+                <!-- Message -->
+                <TextBlock x:Name="MessageText"
+                           Text="Are you sure you want to delete this rule? This action cannot be undone."
+                           FontSize="14"
+                           Foreground="#B9BBBE"
+                           TextWrapping="Wrap"
+                           TextAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,24"
+                           MaxWidth="320"/>
+                
+                <!-- Buttons -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="CancelButton"
+                            Content="Cancel"
+                            Background="#4F545C"
+                            Foreground="White"
+                            Style="{StaticResource ConfirmButtonStyle}"
+                            Click="CancelButton_Click"/>
+                    
+                    <Button x:Name="ConfirmButton"
+                            Content="Delete"
+                            Background="#ED4245"
+                            Foreground="White"
+                            Style="{StaticResource ConfirmButtonStyle}"
+                            Click="ConfirmButton_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

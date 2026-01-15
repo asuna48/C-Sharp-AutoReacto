@@ -1,0 +1,11 @@
+{
+  "token": "YOUR_BOT_TOKEN_HERE",
+  "prefix": "!",
+  "settings": {
+    "ignoreBots": true,
+    "ignoreSelf": true,
+    "reactionDelayMs": 250,
+    "maxReactionsPerMessage": 20,
+    "logLevel": "Information"
+  }
+}

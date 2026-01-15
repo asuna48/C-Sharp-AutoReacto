@@ -1,0 +1,392 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Discord Colors -->
+    <Color x:Key="DiscordDarkColor">#1E1F22</Color>
+    <Color x:Key="DiscordDarkerColor">#111214</Color>
+    <Color x:Key="DiscordSidebarColor">#2B2D31</Color>
+    <Color x:Key="DiscordChannelColor">#313338</Color>
+    <Color x:Key="DiscordBlurpleColor">#5865F2</Color>
+    <Color x:Key="DiscordGreenColor">#57F287</Color>
+    <Color x:Key="DiscordYellowColor">#FEE75C</Color>
+    <Color x:Key="DiscordRedColor">#ED4245</Color>
+    <Color x:Key="DiscordTextColor">#FFFFFF</Color>
+    <Color x:Key="DiscordTextMutedColor">#949BA4</Color>
+    <Color x:Key="DiscordHoverColor">#35373C</Color>
+
+    <!-- Brushes -->
+    <SolidColorBrush x:Key="DiscordDarkBrush" Color="{StaticResource DiscordDarkColor}"/>
+    <SolidColorBrush x:Key="DiscordDarkerBrush" Color="{StaticResource DiscordDarkerColor}"/>
+    <SolidColorBrush x:Key="DiscordSidebarBrush" Color="{StaticResource DiscordSidebarColor}"/>
+    <SolidColorBrush x:Key="DiscordChannelBrush" Color="{StaticResource DiscordChannelColor}"/>
+    <SolidColorBrush x:Key="DiscordBlurpleBrush" Color="{StaticResource DiscordBlurpleColor}"/>
+    <SolidColorBrush x:Key="DiscordGreenBrush" Color="{StaticResource DiscordGreenColor}"/>
+    <SolidColorBrush x:Key="DiscordYellowBrush" Color="{StaticResource DiscordYellowColor}"/>
+    <SolidColorBrush x:Key="DiscordRedBrush" Color="{StaticResource DiscordRedColor}"/>
+    <SolidColorBrush x:Key="DiscordTextBrush" Color="{StaticResource DiscordTextColor}"/>
+    <SolidColorBrush x:Key="DiscordTextMutedBrush" Color="{StaticResource DiscordTextMutedColor}"/>
+    <SolidColorBrush x:Key="DiscordHoverBrush" Color="{StaticResource DiscordHoverColor}"/>
+
+    <!-- Window Style -->
+    <Style x:Key="DiscordWindowStyle" TargetType="Window">
+        <Setter Property="Background" Value="{StaticResource DiscordChannelBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource DiscordTextBrush}"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+
+    <!-- Button Style -->
+    <Style x:Key="DiscordButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource DiscordBlurpleBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource DiscordTextBrush}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="16,10"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" 
+                            Background="{TemplateBinding Background}" 
+                            CornerRadius="4"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#4752C4"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#3C45A5"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="border" Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Success Button Style -->
+    <Style x:Key="DiscordSuccessButtonStyle" TargetType="Button" BasedOn="{StaticResource DiscordButtonStyle}">
+        <Setter Property="Background" Value="{StaticResource DiscordGreenBrush}"/>
+        <Setter Property="Foreground" Value="#000000"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" 
+                            Background="{TemplateBinding Background}" 
+                            CornerRadius="4"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#45C46E"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#3BA55C"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Danger Button Style -->
+    <Style x:Key="DiscordDangerButtonStyle" TargetType="Button" BasedOn="{StaticResource DiscordButtonStyle}">
+        <Setter Property="Background" Value="{StaticResource DiscordRedBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" 
+                            Background="{TemplateBinding Background}" 
+                            CornerRadius="4"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#C43535"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#A52A2A"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Secondary Button Style -->
+    <Style x:Key="DiscordSecondaryButtonStyle" TargetType="Button" BasedOn="{StaticResource DiscordButtonStyle}">
+        <Setter Property="Background" Value="{StaticResource DiscordDarkBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" 
+                            Background="{TemplateBinding Background}" 
+                            CornerRadius="4"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource DiscordHoverBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource DiscordSidebarBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- TextBox Style -->
+    <Style x:Key="DiscordTextBoxStyle" TargetType="TextBox">
+        <Setter Property="Background" Value="{StaticResource DiscordDarkerBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource DiscordTextBrush}"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="12,10"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="CaretBrush" Value="{StaticResource DiscordTextBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border x:Name="border" 
+                            Background="{TemplateBinding Background}" 
+                            CornerRadius="4"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ScrollViewer x:Name="PART_ContentHost" 
+                                      Margin="{TemplateBinding Padding}"
+                                      VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource DiscordBlurpleBrush}"/>
+                            <Setter TargetName="border" Property="BorderThickness" Value="2"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- CheckBox Style -->
+    <Style x:Key="DiscordCheckBoxStyle" TargetType="CheckBox">
+        <Setter Property="Foreground" Value="{StaticResource DiscordTextBrush}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <StackPanel Orientation="Horizontal">
+                        <Border x:Name="checkBorder" 
+                                Width="24" Height="24" 
+                                CornerRadius="4"
+                                Background="{StaticResource DiscordDarkerBrush}"
+                                BorderThickness="2"
+                                BorderBrush="{StaticResource DiscordTextMutedBrush}">
+                            <TextBlock x:Name="checkMark" 
+                                       Text="✓" 
+                                       FontSize="16" 
+                                       FontWeight="Bold"
+                                       Foreground="White"
+                                       HorizontalAlignment="Center" 
+                                       VerticalAlignment="Center"
+                                       Visibility="Collapsed"/>
+                        </Border>
+                        <ContentPresenter Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="checkBorder" Property="Background" Value="{StaticResource DiscordBlurpleBrush}"/>
+                            <Setter TargetName="checkBorder" Property="BorderBrush" Value="{StaticResource DiscordBlurpleBrush}"/>
+                            <Setter TargetName="checkMark" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="checkBorder" Property="BorderBrush" Value="{StaticResource DiscordBlurpleBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ComboBox Style -->
+    <Style x:Key="DiscordComboBoxStyle" TargetType="ComboBox">
+        <Setter Property="Background" Value="{StaticResource DiscordDarkerBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource DiscordTextBrush}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="12,10"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                CornerRadius="4"
+                                Padding="12,10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter x:Name="ContentSite"
+                                                  Grid.Column="0"
+                                                  IsHitTestVisible="False"
+                                                  Content="{TemplateBinding SelectionBoxItem}"
+                                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                  VerticalAlignment="Center"
+                                                  HorizontalAlignment="Left"/>
+                                <TextBlock Grid.Column="1" 
+                                           Text="▼" 
+                                           Foreground="{StaticResource DiscordTextMutedBrush}"
+                                           VerticalAlignment="Center"
+                                           Margin="8,0,0,0"
+                                           FontSize="10"/>
+                            </Grid>
+                        </Border>
+                        <ToggleButton x:Name="ToggleButton"
+                                      Background="Transparent"
+                                      BorderThickness="0"
+                                      IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                      ClickMode="Press"
+                                      Opacity="0"/>
+                        <Popup x:Name="Popup"
+                               Placement="Bottom"
+                               IsOpen="{TemplateBinding IsDropDownOpen}"
+                               AllowsTransparency="True"
+                               PopupAnimation="Slide">
+                            <Border x:Name="DropDown"
+                                    Background="{StaticResource DiscordDarkerBrush}"
+                                    BorderBrush="{StaticResource DiscordDarkBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    MinWidth="{TemplateBinding ActualWidth}"
+                                    MaxHeight="200"
+                                    Margin="0,4,0,0">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <StackPanel IsItemsHost="True"/>
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#1A1B1E"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ComboBoxItem Style -->
+    <Style x:Key="DiscordComboBoxItemStyle" TargetType="ComboBoxItem">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource DiscordTextBrush}"/>
+        <Setter Property="Padding" Value="12,8"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBoxItem">
+                    <Border x:Name="border" 
+                            Background="{TemplateBinding Background}"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource DiscordHoverBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource DiscordBlurpleBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ListBox Style -->
+    <Style x:Key="DiscordListBoxStyle" TargetType="ListBox">
+        <Setter Property="Background" Value="{StaticResource DiscordSidebarBrush}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="8"/>
+    </Style>
+
+    <!-- ListBoxItem Style -->
+    <Style x:Key="DiscordListBoxItemStyle" TargetType="ListBoxItem">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource DiscordTextMutedBrush}"/>
+        <Setter Property="Padding" Value="12,10"/>
+        <Setter Property="Margin" Value="0,2"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="border" 
+                            Background="{TemplateBinding Background}" 
+                            CornerRadius="4"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource DiscordHoverBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource DiscordTextBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource DiscordHoverBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource DiscordTextBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Card Style -->
+    <Style x:Key="DiscordCardStyle" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource DiscordSidebarBrush}"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Padding" Value="16"/>
+        <Setter Property="Margin" Value="0,0,0,16"/>
+    </Style>
+
+    <!-- Section Header Style -->
+    <Style x:Key="DiscordSectionHeaderStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource DiscordTextMutedBrush}"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Margin" Value="0,0,0,8"/>
+    </Style>
+
+    <!-- Title Style -->
+    <Style x:Key="DiscordTitleStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource DiscordTextBrush}"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+
+    <!-- Label Style -->
+    <Style x:Key="DiscordLabelStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource DiscordTextMutedBrush}"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Margin" Value="0,0,0,6"/>
+    </Style>
+
+    <!-- ScrollViewer Style -->
+    <Style x:Key="DiscordScrollViewerStyle" TargetType="ScrollViewer">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+    </Style>
+
+</ResourceDictionary>
